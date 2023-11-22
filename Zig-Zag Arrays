@@ -1,0 +1,40 @@
+package SecretChat;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int size = Integer.parseInt(scanner.nextLine());
+
+        int[] arrA = new int[size];
+        int[] arrB = new int[size];
+
+        fillArrays(scanner, size, arrA, arrB);
+        printArr(arrA);
+        printArr(arrB);
+    }
+
+    private static void fillArrays(Scanner scanner, int size, int[] arrA, int[] arrB) {
+        for (int i = 0; i < size; i++) {
+            int[] numbers = Arrays.stream(scanner.nextLine().split("\\s+"))
+                    .mapToInt(Integer::parseInt).toArray();
+            if (i % 2 == 0) {
+                arrA[i] = numbers[0];
+                arrB[i] = numbers[1];
+            } else {
+                arrA[i] = numbers[1];
+                arrB[i] = numbers[0];
+            }
+        }
+    }
+
+    private static void printArr(int[] arrA) {
+        for (int i : arrA) {
+            System.out.print(i + " ");
+        }
+        System.out.println();
+    }
+}
