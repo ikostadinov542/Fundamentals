@@ -1,0 +1,55 @@
+package JavaFundExams;
+
+import java.util.Scanner;
+
+public class E01_ComptureStore {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+
+        String input = scanner.nextLine();
+        double priceWithoutTaxes = 0;
+        boolean isSpecial = false;
+        boolean isTypeKnown = false;
+
+        while (!isTypeKnown) {
+            if (input.equals("special")) {
+                isSpecial = true;
+                isTypeKnown = true;
+                break;
+            } else if (input.equals("regular")) {
+                isTypeKnown = true;
+                break;
+            }
+            double currPrice = Double.parseDouble(input);
+            if (currPrice <= 0) {
+                System.out.println("Invalid price!");
+            } else {
+                priceWithoutTaxes += currPrice;
+            }
+            input = scanner.nextLine();
+        }
+
+        print(isSpecial, priceWithoutTaxes);
+    }
+
+    private static void print(boolean isSpecial, double priceWithoutTaxes) {
+
+        if (priceWithoutTaxes <= 0) {
+            System.out.println("Invalid order!");
+        } else {
+            System.out.println("Congratulations you've just bought a new computer!");//
+            System.out.printf("Price without taxes: %.2f$%n", priceWithoutTaxes);
+            System.out.printf("Taxes: %.2f$%n", priceWithoutTaxes * 0.2);
+            System.out.println("-----------");
+            if (isSpecial) {
+                System.out.printf("Total price: %.2f$%n", (priceWithoutTaxes * 1.2) * 0.9);
+            } else {
+                System.out.printf("Total price: %.2f$%n", priceWithoutTaxes * 1.2);
+            }
+
+        }
+    }
+
+
+}
