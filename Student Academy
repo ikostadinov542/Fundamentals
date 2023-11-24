@@ -1,0 +1,42 @@
+package AssociatveArraysExercises;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class E06_StudentAcademy {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int countOfStudents = Integer.parseInt(scanner.nextLine());
+
+        Map<String, Double> students = new LinkedHashMap<>();
+        Map<String, Integer> avgGrades = new LinkedHashMap<>();
+        
+        for (int i = 1; i <= countOfStudents; i++) {
+            String studentName = scanner.nextLine();
+            Double grade = Double.parseDouble(scanner.nextLine());
+            
+            if (!students.containsKey(studentName)) {
+                students.put(studentName, grade);
+                avgGrades.put(studentName, 1);
+
+            } else {
+                int value = avgGrades.get(studentName);
+                double currentGrade = students.get(studentName);
+                students.put(studentName, currentGrade + grade);
+                avgGrades.put(studentName, value + 1);
+            }
+        }
+
+        for (Map.Entry<String, Double> entry : students.entrySet()) {
+            String studentName = entry.getKey();
+            double avgGrade = entry.getValue() / avgGrades.get(studentName);
+
+            if (avgGrade > 4.49) {
+                System.out.printf("%s -> %.2f%n", studentName, avgGrade);
+            }
+        }
+        
+    }
+}
