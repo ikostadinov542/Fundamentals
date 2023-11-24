@@ -1,0 +1,45 @@
+package SecretChat;
+
+import java.util.*;
+
+public class WordSynonyms {
+    public static void main(String[] args) {
+
+
+        List<String> oddOccurrencesLangs = fillList();
+        printList(oddOccurrencesLangs);
+
+    }
+
+    private static void printList(List<String> oddOccurrencesList) {
+        String stringsToPrint = String.join(", ", oddOccurrencesList);
+        System.out.println(stringsToPrint);
+    }
+
+    private static List<String> fillList() {
+        Map<String, Integer> words = fillMap();
+        List<String> oddsOccurencesStrings = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : words.entrySet()) {
+            String key = entry.getKey();
+            Integer value = entry.getValue();
+            if (value % 2 != 0) {
+                oddsOccurencesStrings.add(key);
+            }
+        }
+        return oddsOccurencesStrings;
+    }
+
+    private static Map<String, Integer> fillMap() {
+        Scanner scanner = new Scanner(System.in);
+        Map<String, Integer> words = new LinkedHashMap<>();
+        String[] input = scanner.nextLine().toLowerCase().split("\\s+");
+        for (String s : input) {
+            if (words.containsKey(s)) {
+                words.put(s, words.get(s) + 1);
+            } else {
+                words.put(s, 1);
+            }
+        }
+        return words;
+    }
+}
