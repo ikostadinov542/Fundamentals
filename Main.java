@@ -1,48 +1,50 @@
-package StudentsExercise;
+package SongsExercise;
 
-import java.util.Scanner;
-
-import StudentsExercise.Student;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+        int songCount = Integer.parseInt(scanner.nextLine());
 
-        String input = scanner.nextLine();
+        List<Song> songs = new ArrayList<>();
 
-        List<Student> students = new ArrayList<>();
+        for (int i = 1; i <= songCount; i++) {
 
-        while (!input.equals("end")) {
+            String input = scanner.nextLine();
 
-            String[] studentData = input.split("\\s+");
+            String[] splittedInput = input.split("_");
 
-            String firstName = studentData[0];
-            String lastName = studentData[1];
-            int age = Integer.parseInt(studentData[2]);
-            String city = studentData[3];
+            String typeList = splittedInput[0];
+            String name = splittedInput[1];
+            String time = splittedInput[2];
 
-            Student student = new Student(firstName, lastName, age, city);
-            students.add(student);
+            Song song = new Song(typeList, name, time);
+            songs.add(song);
 
-
-            input = scanner.nextLine();
 
         }
 
-        String filterCity = scanner.nextLine();
+        String typePrint = scanner.nextLine();
 
-        for (Student student : students) {
 
-            if (student.getHomeTown().equals(filterCity)) {
-                System.out.printf("%s %s is %d years old%n", student.getFirstName(), student.getLastName(), student.getAge());
+        for (Song song : songs) {
+
+            if (typePrint.equals("all")) {
+
+                for (Song song1 : songs) {
+                    System.out.printf("%s%n", song1.getSongName());
+                }
+                break;
+
+            } else if (song.getTypeList().equals(typePrint)) {
+                System.out.printf("%s%n", song.getSongName());
+
             }
-
         }
-
     }
-
 }
