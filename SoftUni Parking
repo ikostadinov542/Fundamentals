@@ -1,0 +1,52 @@
+package AssociatveArraysExercises;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class E04_SoftUniParking {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int numberOfCommands = Integer.parseInt(scanner.nextLine());
+
+        Map<String, String> users = new LinkedHashMap<>();
+
+        for (int i = 1; i <= numberOfCommands; i++) {
+
+            String[] splittedInput = scanner.nextLine().split("\\s+");
+            String command = splittedInput[0];
+            String username = splittedInput[1];
+
+            switch (command) {
+
+                case "register":
+                    String plateNumber = splittedInput[2];
+
+                    if (!users.containsKey(username)) {
+                        users.put(username, plateNumber);
+                        System.out.printf("%s registered %s successfully%n", username, plateNumber);
+                    } else {
+                        System.out.printf("ERROR: already registered with plate number %s%n", plateNumber);
+                    }
+                    break;
+
+                case "unregister":
+                    if (!users.containsKey(username)) {
+                        System.out.printf("ERROR: user %s not found%n", username);
+
+                    } else {
+                        System.out.printf("%s unregistered successfully%n", username);
+                        users.remove(username);
+                    }
+                    break;
+
+            }
+
+        }
+
+        users.entrySet().stream().forEach(e -> System.out.println(e.getKey() + " => " + e.getValue()));
+
+
+    }
+}
