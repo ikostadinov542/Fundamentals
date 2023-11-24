@@ -1,0 +1,22 @@
+package TextProcessingExercise;
+
+import java.util.Scanner;
+
+public class E03_ExtractFile {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String input = scanner.nextLine();
+
+        String[] splitInput = input.split("\\\\");
+        String lastText = splitInput[splitInput.length - 1];
+
+        String nameOfFile = lastText.split("\\.")[0];
+        String extensionOfFile = lastText.split("\\.")[1];
+
+        System.out.printf("File name: %s%n", nameOfFile);
+        System.out.printf("File extension: %s%n", extensionOfFile);
+
+
+    }
+}
