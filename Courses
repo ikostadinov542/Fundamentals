@@ -1,0 +1,35 @@
+package AssociatveArraysExercises;
+
+import java.util.*;
+
+public class E05_Courses {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        Map<String, List<String>> courses = new LinkedHashMap<>();
+
+        String input = scanner.nextLine();
+
+        while (!input.equals("end")) {
+
+            String course = input.split(" : ")[0];
+            String studentName = input.split(" : ")[1];
+
+            if (!courses.containsKey(course)) {
+                courses.put(course, new ArrayList<>());
+            }
+            courses.get(course).add(studentName);
+
+            input = scanner.nextLine();
+        }
+
+        courses.entrySet().stream().forEach(c -> {
+            System.out.println(c.getKey() + ": " + c.getValue().size());
+            c.getValue().stream()
+                    .forEach(student -> System.out.println("-- " + student));
+        });
+
+
+    }
+
+}
