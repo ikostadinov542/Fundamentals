@@ -1,0 +1,19 @@
+package SecretChat;
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String[] arrA = scanner.nextLine().split("\\s+");
+        String[] arrB = scanner.nextLine().split("\\s+");
+        for (String s : arrB) {
+            for (String s1 : arrA) {
+                if (s.equals(s1)) {
+                    System.out.print(s + " ");
+                }
+            }
+        }
+    }
+}
