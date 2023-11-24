@@ -1,0 +1,28 @@
+
+import java.util.Scanner;
+import java.util.Arrays;
+
+
+public class E08_MagicSum2 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int[] numbers = Arrays.stream(scanner.nextLine().split(" "))
+                .mapToInt(e -> Integer.parseInt(e)).toArray();
+        int magicSum = Integer.parseInt(scanner.nextLine());
+
+        for (int firstIndex = 0; firstIndex <= numbers.length - 1; firstIndex++) {
+
+            int firstNum = numbers[firstIndex];
+
+            for (int secondIndex = firstIndex + 1; secondIndex <= numbers.length - 1; secondIndex++) {
+                int secondNum = numbers[secondIndex];
+
+                if (firstNum + secondNum == magicSum) {
+                    System.out.println(firstNum + " " + secondNum);
+
+                }
+            }
+        }
+    }
+}
