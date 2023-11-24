@@ -1,0 +1,29 @@
+package CodingBatWarmup1;
+
+import java.util.Scanner;
+
+public class E04_TextFilter {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String[] forbiddenWords = scanner.nextLine().split(", ");
+        String input = scanner.nextLine();
+
+        for (String forbiddenWord : forbiddenWords) {
+            if (input.contains(forbiddenWord)) {
+                String wordOfStars = convertWordToStarts(forbiddenWord);
+                input = input.replace(forbiddenWord, wordOfStars);
+            }
+        }
+
+        System.out.println(input);
+
+    }
+
+    private static String convertWordToStarts(String word) {
+        StringBuilder wordOfStars = new StringBuilder();
+        for (int i = 0; i < word.length(); i++) {
+            wordOfStars.append("*");
+        }
+        return wordOfStars.toString();
+    }
+}
