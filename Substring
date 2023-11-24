@@ -1,0 +1,27 @@
+package TextProcessing;
+
+import java.util.Scanner;
+
+public class E02_Substring {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String wordTiRemove = scanner.nextLine();
+        String input = scanner.nextLine();
+
+        while (input.contains(wordTiRemove)) {
+            input = removeOcurrence(input, wordTiRemove);
+        }
+        System.out.println(input);
+
+
+    }
+
+    private static String removeOcurrence(String input, String wordTiRemove) {
+
+        int beginIndex = input.indexOf(wordTiRemove);
+        int endIndex = beginIndex + wordTiRemove.length();
+        return input.substring(0, beginIndex) + input.substring(endIndex);
+        
+    }
+}
