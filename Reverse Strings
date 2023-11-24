@@ -1,0 +1,20 @@
+package TextProcessing;
+
+import java.util.Scanner;
+
+public class E01_ReverseStrings {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String input = scanner.nextLine();
+
+        while (!input.equals("end")) {
+
+            StringBuilder reversedInput = new StringBuilder(input);
+            reversedInput.reverse();
+            System.out.println(input + " = " + reversedInput.toString());
+
+            input = scanner.nextLine();
+        }
+    }
+}
