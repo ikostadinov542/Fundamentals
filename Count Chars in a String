@@ -1,0 +1,23 @@
+import java.util.*;
+
+public class WordSynonyms {
+    public static void main(String[] args) {
+
+        Map<String, Integer> charsOccurrences = fillMap();
+        charsOccurrences.forEach((letter, occurrences) -> System.out.println(letter + " -> " + occurrences));
+    }
+
+    private static Map<String, Integer> fillMap() {
+        Scanner scanner = new Scanner(System.in);
+        String[] input = scanner.nextLine().replaceAll("\\s+", "").split("");
+        Map<String, Integer> charsOccurrences = new LinkedHashMap<>();
+        for (String s : input) {
+            if (charsOccurrences.containsKey(s)) {
+                charsOccurrences.put(s, charsOccurrences.get(s) + 1);
+            } else {
+                charsOccurrences.put(s, 1);
+            }
+        }
+        return charsOccurrences;
+    }
+}
