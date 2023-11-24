@@ -1,0 +1,33 @@
+package SecretChat;
+
+import java.util.*;
+
+public class WordSynonyms {
+    public static void main(String[] args) {
+
+        Map<String, List<String>> words = fillMap();
+        printMap(words);
+
+    }
+
+    private static Map<String, List<String>> fillMap() {
+        Scanner scanner = new Scanner(System.in);
+        int countLines = Integer.parseInt(scanner.nextLine());
+        Map<String, List<String>> words = new LinkedHashMap<>();
+        for (int i = 0; i < countLines; i++) {
+            String word = scanner.nextLine();
+            String synonym = scanner.nextLine();
+            words.putIfAbsent(word, new ArrayList<>());
+            words.get(word).add(synonym);
+        }
+        return words;
+    }
+    private static void printMap(Map<String, List<String>> words) {
+        for (Map.Entry<String, List<String>> entry : words.entrySet()) {
+            String word = entry.getKey();
+            List<String> synonyms = entry.getValue();
+            String synonymsStr = String.join(", ", synonyms);
+            System.out.println(word + " - " + synonymsStr);
+        }
+    }
+}
