@@ -1,0 +1,30 @@
+package JavaBasicSyntaxConditionalStatementsAndLoopsExercise;
+
+import java.util.Scanner;
+
+public class E02_Division {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int num = scanner.nextInt();
+        int[] divisibleArr = {10, 7, 6, 3, 2};
+        boolean isDivisible = false;
+
+        for (int currDivisible : divisibleArr) {
+            if (num % currDivisible == 0) {
+                System.out.println(printResult(currDivisible));
+                isDivisible = true;
+                break;
+            }
+        }
+        if (!isDivisible) {
+            System.out.println("Not divisible");
+        }
+    }
+    private static String printResult(int currDivisible) {
+        return String.format("The number is divisible by %d", currDivisible);
+    }
+}
+
+
