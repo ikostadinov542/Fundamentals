@@ -1,0 +1,34 @@
+package JavaBasicSyntaxConditionalStatementsAndLoopsExercise;
+
+import java.util.Scanner;
+
+public class E01_Ages {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int ages = Integer.parseInt(scanner.nextLine());
+        String type = getType(ages);
+        System.out.println(type);
+    }
+
+    private static String getType(int ages) {
+        String type;
+        if (ages < 3) {
+            type = "baby";
+        } else if (ages < 14) {
+            type = "child";
+        } else if (ages < 20) {
+            type = "teenager";
+        } else if (ages < 66) {
+            type = "adult";
+        } else {
+            type = "elder";
+        }
+        return type;
+    }
+
+
+}
+
+
