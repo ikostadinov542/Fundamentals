@@ -1,32 +1,25 @@
-package AssociatveArraysExercises;
+package SecretChat;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
-public class E02_aMinerTask {
+public class WordSynonyms {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        String command = scanner.nextLine();
-
+        String input = scanner.nextLine();
         Map<String, Integer> resources = new LinkedHashMap<>();
 
-        while (!command.equals("stop")) {
-
-            int valueOfCurrentResource = Integer.parseInt(scanner.nextLine());
-
-            if (!resources.containsKey(command)) {
-                resources.put(command, valueOfCurrentResource);
-
-            } else {
-                resources.put(command, resources.get(command) + valueOfCurrentResource);
-            }
-
-            command = scanner.nextLine();
-
+        while (!"stop".equals(input)) {
+            String resource = input;
+            int quantity = Integer.parseInt(scanner.nextLine());
+            resources.merge(resource, quantity, Integer::sum);
+            
+            input = scanner.nextLine();
         }
+        printResources(resources);
+    }
 
+    private static void printResources(Map<String, Integer> resources) {
         resources.forEach((k, v) -> System.out.println(k + " -> " + v));
     }
 }
