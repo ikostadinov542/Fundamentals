@@ -1,0 +1,47 @@
+package SecretChat;
+
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int studentsCount = Integer.parseInt(scanner.nextLine());
+        Map<String, List<Double>> studentGrades = new LinkedHashMap<>();
+        updateGrades(scanner, studentsCount, studentGrades);
+        removeInvalidGrades(studentGrades);
+        studentGrades.forEach((student, grades) -> System.out.printf("%s -> %.2f%n", student, calculateAvg(grades)));
+
+    }
+
+    private static void removeInvalidGrades(Map<String, List<Double>> studentGrades) {
+        Iterator<Map.Entry<String, List<Double>>> iterator = studentGrades.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, List<Double>> entry = iterator.next();
+            double average = calculateAvg(entry.getValue());
+            if (average < 4.5) {
+                iterator.remove();
+            }
+        }
+    }
+
+
+    private static void updateGrades(Scanner scanner, int studentsCount, Map<String, List<Double>> studentGrades) {
+        for (int i = 0; i < studentsCount; i++) {
+            String studentName = scanner.nextLine();
+            double grade = Double.parseDouble(scanner.nextLine());
+
+            studentGrades.putIfAbsent(studentName, new ArrayList<>());
+            studentGrades.get(studentName).add(grade);
+
+        }
+    }
+
+    private static Double calculateAvg(List<Double> value) {
+
+        return value.stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
+
+    }
+
+}
+
