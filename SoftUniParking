@@ -1,0 +1,63 @@
+package SecretChat;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int commandsCounter = Integer.parseInt(scanner.nextLine());
+        Map<String, String> parking = new LinkedHashMap<>();
+        while (commandsCounter-- > 0) {
+            updateParking(scanner, parking);
+        }
+        printParking(parking);
+
+    }
+
+    private static void printParking(Map<String, String> parking) {
+        parking.forEach((user, plate) -> System.out.println(user + " => " + plate));
+    }
+
+    private static void updateParking(Scanner scanner, Map<String, String> parking) {
+        String[] tokens = scanner.nextLine().split("\\s+");
+        String command = tokens[0];
+        String username = tokens[1];
+
+        switch (command) {
+            case "register":
+                registerUser(parking, tokens, username);
+                break;
+
+            case "unregister":
+                unregisterUser(parking, username);
+                break;
+
+
+        }
+    }
+
+    private static void registerUser(Map<String, String> parking, String[] tokens, String username) {
+        String licencePlateNumber = tokens[2];
+
+        if (!parking.containsKey(username)) {
+            parking.put(username, licencePlateNumber);
+            System.out.printf("%s registered %s successfully%n", username, licencePlateNumber);
+        } else {
+            System.out.printf("ERROR: already registered with plate number %s%n", licencePlateNumber);
+        }
+    }
+
+    private static void unregisterUser(Map<String, String> parking, String username) {
+        if (!parking.containsKey(username)) {
+            System.out.printf("ERROR: user %s not found%n", username);
+        } else {
+            parking.remove(username);
+            System.out.printf("%s unregistered successfully%n", username);
+        }
+    }
+
+}
+
