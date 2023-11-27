@@ -1,35 +1,49 @@
-package AssociatveArraysExercises;
+package SecretChat;
 
 import java.util.*;
 
-public class E05_Courses {
+public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        Map<String, List<String>> courses = new LinkedHashMap<>();
-
         String input = scanner.nextLine();
 
-        while (!input.equals("end")) {
+        Map<String, List<String>> courses = new LinkedHashMap<>();
 
-            String course = input.split(" : ")[0];
-            String studentName = input.split(" : ")[1];
-
-            if (!courses.containsKey(course)) {
-                courses.put(course, new ArrayList<>());
-            }
-            courses.get(course).add(studentName);
-
+        while (!"end".equals(input)) {
+            updateCourseInformation(input, courses);
             input = scanner.nextLine();
         }
 
-        courses.entrySet().stream().forEach(c -> {
+        printCourses(courses);
+
+    }
+
+    private static void printCourses(Map<String, List<String>> courses) {
+
+        for (Map.Entry<String, List<String>> entry : courses.entrySet()) {
+            List<String> value = entry.getValue();
+            System.out.printf("%s: %d%n", entry.getKey(), value.size());
+            for (String s : value) {
+                System.out.println("-- " + s);
+            }
+        }
+        /* courses.entrySet().stream().forEach(c -> {
             System.out.println(c.getKey() + ": " + c.getValue().size());
             c.getValue().stream()
                     .forEach(student -> System.out.println("-- " + student));
         });
+*/
+    }
 
 
+    private static void updateCourseInformation(String input, Map<String, List<String>> courses) {
+        String[] tokens = input.split(" : ");
+        String course = tokens[0];
+        String student = tokens[1];
+        courses.putIfAbsent(course, new ArrayList<>());
+        courses.get(course).add(student);
     }
 
 }
+
