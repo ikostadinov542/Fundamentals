@@ -1,7 +1,5 @@
-
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -9,63 +7,58 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         int n = Integer.parseInt(scanner.nextLine());
+        String input = scanner.nextLine();
 
-        Map<String, Department> departments = new HashMap<>();
+        List<String> fragile = new ArrayList<>();
+        List<String> flamable = new ArrayList<>();
 
         while (n-- > 0) {
-            String employeeData = scanner.nextLine();
-            String[] parameters = employeeData.split("\\s+");
-            String name = parameters[0];
-            double salary = Double.parseDouble(parameters[1]);
-            String position = parameters[2];
-            String department = parameters[3];
 
-            Employee employee = null;
+            String[] data = input.split("\\s+");
+            String carModel = data[0];
+            Engine engine = new Engine(Integer.parseInt(data[1]), Integer.parseInt(data[2]));
+            Cargo cargo = new Cargo(Integer.parseInt(data[3]), data[4]);
 
-            if (parameters.length == 6) {
-                String email = parameters[4];
-                int age = Integer.parseInt(parameters[5]);
-                employee = new Employee(name, salary, position, department, email, age);
+            double[] tiresPressure = {
+                    Double.parseDouble(data[5]),
+                    Double.parseDouble(data[7]),
+                    Double.parseDouble(data[9]),
+                    Double.parseDouble(data[11])};
+            int[] tiresAge = {
+                    Integer.parseInt(data[6]),
+                    Integer.parseInt(data[8]),
+                    Integer.parseInt(data[10]),
+                    Integer.parseInt(data[12])};
 
-            } else if (parameters.length == 5) {
-                String parameterForth = parameters[4];
-                try {
-                    int age = Integer.parseInt(parameterForth);
-                    employee = new Employee(name, salary, position, department, age);
-                } catch (NumberFormatException e) {
-                    String email = parameterForth;
-                    employee = new Employee(name, salary, position, department, email);
+            Tires tires = new Tires(tiresPressure, tiresAge);
+
+            int currCarPower = engine.getPower();
+            if (currCarPower > 250) {
+                flamable.add(carModel);
+            }
+
+            for (double tire : tiresPressure) {
+                if (tire < 1) {
+                    fragile.add(carModel);
+                    break;
                 }
-
-                /*if (employeeData.contains("@")) {
-                    String email = parameters[4];
-                    Employee employee = new Employee(name, salary, position, department, email);
-                } else {
-                    int age = Integer.parseInt(parameters[4]);
-                    Employee employee = new Employee(name, salary, position, department, age);
-                }*/
-
-            } else if (parameters.length == 4) {
-                employee = new Employee(name, salary, position, department);
             }
 
 
-            if (!departments.containsKey(department)) {
-                departments.put(department, new Department(department));
-                departments.get(department).getEmployees().add(employee);
-            } else {
-                departments.get(department).getEmployees().add(employee);
-            }
+            input = scanner.nextLine();
+
         }
-        Department maxAvgSalaryDep = departments.entrySet()
-                .stream()
-                .max(Comparator.comparingDouble(entry -> entry.getValue()
-                        .getAvgSalary())).get().getValue();
 
-        System.out.println("Highest Average Salary: " + maxAvgSalaryDep.getName());
-        maxAvgSalaryDep.getEmployees().stream()
-                .sorted((e1, e2) -> Double.compare(e2.getSalary(), e1.getSalary()))
-                .forEach(employee -> System.out.println(employee.toString()));
+        switch (input) {
+            case "fragile":
+                fragile.forEach(System.out::println);
+                break;
+
+            case "flamable":
+                flamable.forEach(System.out::println);
+                break;
+        }
+
 
     }
 }
