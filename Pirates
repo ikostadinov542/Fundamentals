@@ -1,0 +1,124 @@
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Pirates {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        Map<String, City> cities = fillCities(scanner);
+
+        String event = scanner.nextLine();
+        updateCitiesInfo(scanner, cities, event);
+        printCities(cities);
+    }
+
+    private static void updateCitiesInfo(Scanner scanner, Map<String, City> cities, String event) {
+        while (!event.equals("End")) {
+            String[] tokens = event.split("=>");
+            String command = tokens[0];
+            String town = tokens[1];
+
+            switch (command) {
+                case "Plunder":
+                    int peopleKilled = Integer.parseInt(tokens[2]);
+                    int goldStolen = Integer.parseInt(tokens[3]);
+                    plunderCity(cities, town, peopleKilled, goldStolen);
+                    break;
+                case "Prosper":
+                    int goldAdded = Integer.parseInt(tokens[2]);
+                    prosperCity(cities, town, goldAdded);
+                    break;
+            }
+
+            event = scanner.nextLine();
+        }
+    }
+
+    private static Map<String, City> fillCities(Scanner scanner) {
+        Map<String, City> cities = new LinkedHashMap<>();
+        String input = scanner.nextLine();
+        while (!input.equals("Sail")) {
+            String[] tokens = input.split("\\|\\|");
+            String town = tokens[0];
+            int population = Integer.parseInt(tokens[1]);
+            int gold = Integer.parseInt(tokens[2]);
+            if (!cities.containsKey(town)) {
+                cities.put(town, new City(population, gold));
+            } else {
+                City city = cities.get(town);
+                city.setPopulation(city.getPopulation() + population);
+                city.setGold(city.getGold() + gold);
+                cities.put(town, city);
+            }
+
+            input = scanner.nextLine();
+        }
+        return cities;
+    }
+
+    private static void plunderCity(Map<String, City> cities, String town, int peopleKilled, int goldStolen) {
+        if (cities.containsKey(town)) {
+            City city = cities.get(town);
+            city.setPopulation(city.getPopulation() - peopleKilled);
+            city.setGold(city.getGold() - goldStolen);
+
+            System.out.printf("%s plundered! %d gold stolen, %d citizens killed.%n", town, goldStolen, peopleKilled);
+
+            if (city.getPopulation() <= 0 || city.getGold() <= 0) {
+                cities.remove(town);
+                System.out.printf("%s has been wiped off the map!%n", town);
+            }
+        }
+    }
+
+    private static void prosperCity(Map<String, City> cities, String town, int goldAdded) {
+        if (cities.containsKey(town)) {
+            if (goldAdded < 0) {
+                System.out.println("Gold added cannot be a negative number!");
+            } else {
+                City city = cities.get(town);
+                city.setGold(city.getGold() + goldAdded);
+                System.out.printf("%d gold added to the city treasury. %s now has %d gold.%n",
+                        goldAdded, town, city.getGold());
+            }
+        }
+    }
+
+    private static void printCities(Map<String, City> cities) {
+        if (cities.isEmpty()) {
+            System.out.println("Ahoy, Captain! All targets have been plundered and destroyed!");
+        } else {
+            System.out.printf("Ahoy, Captain! There are %d wealthy settlements to go to:%n", cities.size());
+            cities.forEach((town, city) ->
+                    System.out.printf("%s -> Population: %d citizens, Gold: %d kg%n",
+                            town, city.getPopulation(), city.getGold()));
+        }
+    }
+
+    static class City {
+        private int population;
+        private int gold;
+
+        public City(int population, int gold) {
+            this.population = population;
+            this.gold = gold;
+        }
+
+        public int getPopulation() {
+            return population;
+        }
+
+        public void setPopulation(int population) {
+            this.population = population;
+        }
+
+        public int getGold() {
+            return gold;
+        }
+
+        public void setGold(int gold) {
+            this.gold = gold;
+        }
+    }
+}
