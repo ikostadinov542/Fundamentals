@@ -7,13 +7,12 @@ public class Pirates {
         Scanner scanner = new Scanner(System.in);
 
         Map<String, City> cities = fillCities(scanner);
-
-        String event = scanner.nextLine();
-        updateCitiesInfo(scanner, cities, event);
+        updateCitiesInfo(scanner, cities);
         printCities(cities);
     }
 
-    private static void updateCitiesInfo(Scanner scanner, Map<String, City> cities, String event) {
+    private static void updateCitiesInfo(Scanner scanner, Map<String, City> cities) {
+        String event = scanner.nextLine();
         while (!event.equals("End")) {
             String[] tokens = event.split("=>");
             String command = tokens[0];
