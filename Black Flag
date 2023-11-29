@@ -21,7 +21,7 @@ public class BlackFlag {
         for (int i = 1; i <= daysToPlunder; i++) {
             currentPlunder += plunderPerDay;
             if (i % 3 == 0) {
-                currentPlunder = currentPlunder + (plunderPerDay * 0.5);
+                currentPlunder += (plunderPerDay * 0.5);
             }
             if (i % 5 == 0) {
                 currentPlunder *= 0.7;
