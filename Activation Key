@@ -1,0 +1,71 @@
+import java.util.Scanner;
+
+public class ActivationKeys {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+
+        String rawActivaionKey = scanner.nextLine();
+        String input = scanner.nextLine();
+
+        while (!input.equals("Generate")) {
+            String[] splitInput = input.split(">>>");
+            String command = splitInput[0];
+            rawActivaionKey = updateKey(rawActivaionKey, splitInput, command);
+            input = scanner.nextLine();
+        }
+
+        System.out.printf("Your activation key is: %s", rawActivaionKey);
+
+    }
+
+    private static String updateKey(String rawActivaionKey, String[] splitInput, String command) {
+        switch (command) {
+            case "Contains":
+                isContains(rawActivaionKey, splitInput);
+                break;
+
+            case "Flip":
+                rawActivaionKey = flipSubstrings(rawActivaionKey, splitInput);
+                break;
+
+            case "Slice":
+                rawActivaionKey = sliceSubstring(rawActivaionKey, splitInput);
+                break;
+
+        }
+        return rawActivaionKey;
+    }
+
+    private static String sliceSubstring(String rawActivaionKey, String[] splitInput) {
+        int startSliceIndex = Integer.parseInt(splitInput[1]);
+        int endSliceIndex = Integer.parseInt(splitInput[2]);
+        String substringToSlice = rawActivaionKey.substring(startSliceIndex, endSliceIndex);
+        rawActivaionKey = rawActivaionKey.replace(substringToSlice, "");
+        System.out.println(rawActivaionKey);
+        return rawActivaionKey;
+    }
+
+    private static String flipSubstrings(String rawActivaionKey, String[] splitInput) {
+        String point = splitInput[1];
+        int startFlipIndex = Integer.parseInt(splitInput[2]);
+        int endFlipIndex = Integer.parseInt(splitInput[3]);
+        String substringToUpdate = rawActivaionKey.substring(startFlipIndex, endFlipIndex);
+        if (point.equals("Upper")) {
+            rawActivaionKey = rawActivaionKey.replace(substringToUpdate, substringToUpdate.toUpperCase());
+        } else if (point.equals("Lower")) {
+            rawActivaionKey = rawActivaionKey.replace(substringToUpdate, substringToUpdate.toLowerCase());
+        }
+        System.out.println(rawActivaionKey);
+        return rawActivaionKey;
+    }
+
+    private static void isContains(String rawActivaionKey, String[] splitInput) {
+        String substring = splitInput[1];
+        if (rawActivaionKey.contains(substring)) {
+            System.out.printf("%s contains %s%n", rawActivaionKey, substring);
+        } else {
+            System.out.println("Substring not found!");
+        }
+    }
+}
