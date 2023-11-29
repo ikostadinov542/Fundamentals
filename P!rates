@@ -1,0 +1,103 @@
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Pirates2 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String input = scanner.nextLine();
+
+        Map<String, Integer> townPopulation = new LinkedHashMap<>();
+        Map<String, Integer> townGold = new LinkedHashMap<>();
+        fillPopulationAndGold(scanner, input, townPopulation, townGold);
+        updatePopulationAndGold(scanner, townPopulation, townGold);
+        printRemainingCities(townPopulation, townGold);
+    }
+
+    private static void printRemainingCities(Map<String, Integer> townPopulation, Map<String, Integer> townGold) {
+        if (!townPopulation.isEmpty()) {
+            System.out.printf("Ahoy, Captain! There are %d wealthy settlements to go to:%n", townPopulation.size());
+            townPopulation.forEach((town, value) -> {
+                int population = value;
+                int gold = townGold.get(town);
+                System.out.printf("%s -> Population: %d citizens, Gold: %d kg%n", town, population, gold);
+            });
+        } else {
+            System.out.println("Ahoy, Captain! All targets have been plundered and destroyed!");
+        }
+    }
+
+    private static void updatePopulationAndGold(Scanner scanner, Map<String, Integer> townPopulation, Map<String, Integer> townGold) {
+        String command = scanner.nextLine();
+
+        while (!"End".equals(command)) {
+            String[] tokens = command.split("=>");
+            String action = tokens[0];
+            String townName = tokens[1];
+
+            switch (action) {
+                case "Plunder":
+                    plunderCity(townPopulation, townGold, tokens, townName);
+                    break;
+
+                case "Prosper":
+                    prosperCity(townGold, tokens, townName);
+                    break;
+            }
+
+
+            command = scanner.nextLine();
+        }
+    }
+
+    private static void prosperCity(Map<String, Integer> townGold, String[] tokens, String townName) {
+        int goldToAdd = Integer.parseInt(tokens[2]);
+        if (goldToAdd > 0) {
+            townGold.put(townName, townGold.get(townName) + goldToAdd);
+            System.out.printf("%d gold added to the city treasury. %s now has %d gold.%n", goldToAdd, townName, townGold.get(townName));
+        } else {
+            System.out.println("Gold added cannot be a negative number!");
+        }
+    }
+
+    private static void plunderCity
+            (Map<String, Integer> townPopulation, Map<String, Integer> townGold, String[] tokens, String townName) {
+        int peopleToKill = Integer.parseInt(tokens[2]);
+        int goldToSteal = Integer.parseInt(tokens[3]);
+        System.out.printf("%s plundered! %d gold stolen, %d citizens killed.%n", townName, goldToSteal, peopleToKill);
+        townPopulation.put(townName, townPopulation.get(townName) - peopleToKill);
+        townGold.put(townName, townGold.get(townName) - goldToSteal);
+        checkIfWipedOff(townPopulation, townGold, townName);
+    }
+
+    private static void checkIfWipedOff
+            (Map<String, Integer> townPopulation, Map<String, Integer> townGold, String townName) {
+        if (townPopulation.get(townName) <= 0 || townGold.get(townName) <= 0) {
+            townPopulation.remove(townName);
+            townGold.remove(townName);
+            System.out.printf("%s has been wiped off the map!%n", townName);
+        }
+    }
+
+    private static void fillPopulationAndGold(Scanner scanner, String
+            input, Map<String, Integer> townPopulation, Map<String, Integer> townGold) {
+        while (!"Sail".equals(input)) {
+            String[] tokens = input.split("\\|\\|");
+            String town = tokens[0];
+            int population = Integer.parseInt(tokens[1]);
+            int gold = Integer.parseInt(tokens[2]);
+
+            if (!townPopulation.containsKey(town)) {
+                townPopulation.put(town, population);
+                townGold.put(town, gold);
+            } else {
+                townPopulation.put(town, townPopulation.get(town) + population);
+                townGold.put(town, townGold.get(town) + gold);
+            }
+            input = scanner.nextLine();
+
+        }
+    }
+
+}
