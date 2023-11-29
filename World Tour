@@ -1,0 +1,71 @@
+import java.util.Scanner;
+
+public class WorldTour {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String stops = scanner.nextLine();
+
+        while (true) {
+            String line = scanner.nextLine();
+            if ("Travel".equals(line)) {
+                break;
+            }
+            String[] commandParts = line.split(":");
+            String command = commandParts[0];
+            stops = updateStops(stops, commandParts, command);
+            System.out.println(stops);
+        }
+
+        printResult(stops);
+
+    }
+
+    private static void printResult(String stops) {
+        System.out.printf("Ready for world tour! Planned stops: %s%n", stops);
+    }
+
+    private static String updateStops(String stops, String[] commandParts, String command) {
+        switch (command) {
+            case "Add Stop" -> stops = addStop(stops, commandParts);
+            case "Remove Stop" -> stops = removeStop(stops, commandParts);
+            case "Switch" -> stops = switchStops(stops, commandParts);
+        }
+        return stops;
+    }
+
+    private static String switchStops(String stops, String[] commandParts) {
+        String stopToReplace = commandParts[1];
+        String replacment = commandParts[2];
+        stops = stops.replace(stopToReplace, replacment);
+        return stops;
+    }
+
+    private static String removeStop(String stops, String[] commandParts) {
+        int startIndex = Integer.parseInt(commandParts[1]);
+        int endIndex = Integer.parseInt(commandParts[2]);
+
+        if (isValid(startIndex, stops) && isValid(endIndex, stops)) {
+            String left = stops.substring(0, startIndex);
+            String right = stops.substring(endIndex + 1);
+            stops = left + right;
+        }
+        return stops;
+    }
+
+    private static String addStop(String stops, String[] commandParts) {
+        int index = Integer.parseInt(commandParts[1]);
+        String stopToAdd = commandParts[2];
+        if (isValid(index, stops)) {
+            String firstString = stops.substring(0, index);
+            String secondString = stops.substring(index);
+            stops = firstString + stopToAdd + secondString;
+
+        }
+        return stops;
+    }
+
+    private static boolean isValid(int index, String stops) {
+        return index >= 0 && index < stops.length();
+    }
+}
