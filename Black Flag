@@ -1,0 +1,42 @@
+import java.util.Scanner;
+
+public class BlackFlag {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        double currentPlunder = getCurrentPlunder(scanner);
+        printResult(scanner, currentPlunder);
+
+    }
+
+    private static double getCurrentPlunder(Scanner scanner) {
+        int daysToPlunder = Integer.parseInt(scanner.nextLine());
+        int plunderPerDay = Integer.parseInt(scanner.nextLine());
+        double currentPlunder = 0;
+        currentPlunder = calculatePlunder(daysToPlunder, plunderPerDay, currentPlunder);
+        return currentPlunder;
+    }
+
+    private static double calculatePlunder(int daysToPlunder, int plunderPerDay, double currentPlunder) {
+        for (int i = 1; i <= daysToPlunder; i++) {
+            currentPlunder += plunderPerDay;
+            if (i % 3 == 0) {
+                currentPlunder = currentPlunder + (plunderPerDay * 0.5);
+            }
+            if (i % 5 == 0) {
+                currentPlunder *= 0.7;
+            }
+        }
+        return currentPlunder;
+    }
+
+    private static void printResult(Scanner scanner, double currentPlunder) {
+        double expectedPlunder = Double.parseDouble(scanner.nextLine());
+        if (currentPlunder >= expectedPlunder) {
+            System.out.printf("Ahoy! %.2f plunder gained.", currentPlunder);
+        } else {
+            System.out.printf("Collected only %.2f%% of the plunder.", currentPlunder / expectedPlunder * 100);
+
+        }
+    }
+}
