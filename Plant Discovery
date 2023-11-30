@@ -1,0 +1,82 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        Map<String, Integer> plantsRarity = getPlants(scanner);
+        Map<String, List<Integer>> plantsRatings = getPlantsFromRarity(plantsRarity);
+
+        String input = scanner.nextLine();
+
+        while (!"Exhibition".equals(input)) {
+            updatePlantsInfo(plantsRarity, plantsRatings, input);
+            input = scanner.nextLine();
+        }
+        printResult(plantsRarity, plantsRatings);
+
+    }
+
+    private static void updatePlantsInfo(Map<String, Integer> plantsRarity, Map<String, List<Integer>> plantsRatings, String input) {
+        String[] tokens = input.split("\\s+");
+        String command = tokens[0];
+        String plantName = tokens[1];
+
+        if (plantsRatings.containsKey(plantName)) {
+            switch (command) {
+                case "Rate:":
+                    addRating(plantsRatings, tokens, plantName);
+                    break;
+                case "Update:":
+                    updateRarity(plantsRarity, tokens, plantName);
+                    break;
+                case "Reset:":
+                    plantsRatings.get(plantName).clear();
+                    break;
+            }
+        } else {
+            System.out.println("error");
+        }
+    }
+
+    private static void updateRarity(Map<String, Integer> plantsRarity, String[] tokens, String plantName) {
+        int newRarity = Integer.parseInt(tokens[3]);
+        plantsRarity.put(plantName, newRarity);
+    }
+
+    private static void addRating(Map<String, List<Integer>> plantsRatings, String[] tokens, String plantName) {
+        int currRating = Integer.parseInt(tokens[3]);
+        plantsRatings.get(plantName).add(currRating);
+    }
+
+    private static Map<String, List<Integer>> getPlantsFromRarity(Map<String, Integer> plantsRarity) {
+        Map<String, List<Integer>> map = new LinkedHashMap<>();
+        for (String s : plantsRarity.keySet()) {
+            map.put(s, new ArrayList<>());
+        }
+        return map;
+
+    }
+
+    private static Map<String, Integer> getPlants(Scanner scanner) {
+        Map<String, Integer> plantsRarity = new LinkedHashMap<>();
+        int countOfPlants = Integer.parseInt(scanner.nextLine());
+        while (countOfPlants-- > 0) {
+            String[] input = scanner.nextLine().split("<->");
+            String plantName = input[0];
+            int rarity = Integer.parseInt(input[1]);
+            plantsRarity.put(plantName, rarity);
+
+        }
+        return plantsRarity;
+    }
+
+    private static void printResult(Map<String, Integer> plantsRarity, Map<String, List<Integer>> plantsRatings) {
+        System.out.println("Plants for the exhibition:");
+        plantsRarity.forEach((k, v) -> {
+            double average = plantsRatings.get(k).stream().mapToDouble(Integer::doubleValue).average().orElse(0.00);
+            System.out.printf("- %s; Rarity: %d; Rating: %.2f%n", k, v, average);
+        });
+    }
+
+}
