@@ -1,0 +1,48 @@
+import java.util.*;
+
+public class Main {
+    private static final int SHOT_TARGET = -1;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int[] numbers = Arrays.stream(scanner.nextLine().split("\\s+"))
+                .mapToInt(Integer::parseInt).toArray();
+
+        String input = scanner.nextLine();
+
+        int countShotTargets = 0;
+
+        while (!"End".equals(input)) {
+            int currTarget = Integer.parseInt(input);
+            if (isValid(currTarget, numbers)) {
+                int targetValue = numbers[currTarget];
+                numbers[currTarget] = SHOT_TARGET;
+                updateTargets(numbers, targetValue);
+                countShotTargets++;
+            }
+            input = scanner.nextLine();
+        }
+        printResult(numbers, countShotTargets);
+
+    }
+
+    private static void printResult(int[] numbers, int countShotTargets) {
+        System.out.printf("Shot targets: %d -> ", countShotTargets);
+        Arrays.stream(numbers).forEach(i -> System.out.print(i + " "));
+    }
+
+    private static void updateTargets(int[] numbers, int targetValue) {
+        for (int i = 0; i < numbers.length; i++) {
+            if (numbers[i] <= targetValue && numbers[i] != SHOT_TARGET) {
+                numbers[i] += targetValue;
+            } else if (numbers[i] > targetValue && numbers[i] != SHOT_TARGET) {
+                numbers[i] -= targetValue;
+            }
+        }
+    }
+
+    private static boolean isValid(int index, int[] array) {
+        return index >= 0 && index < array.length && array[index] != SHOT_TARGET;
+    }
+}
