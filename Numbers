@@ -1,0 +1,57 @@
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int[] numbers = getNumbers(scanner);
+        double average = getAverage(numbers);
+        List<Integer> topIntegers = collectIntegers(numbers, average);
+        List<Integer> sortedTopIntegers = getSortedList(topIntegers);
+        printResult(sortedTopIntegers);
+
+    }
+
+    private static double getAverage(int[] numbers) {
+        return Arrays.stream(numbers).average().orElse(0.0);
+    }
+
+    private static int[] getNumbers(Scanner scanner) {
+        return Arrays.stream(scanner.nextLine().split("\\s+"))
+                .mapToInt(Integer::parseInt).toArray();
+    }
+
+    private static void printResult(List<Integer> sortedTopIntegers) {
+        if (sortedTopIntegers.isEmpty()) {
+            System.out.println("No");
+        } else {
+            for (Integer sortedTopInteger : sortedTopIntegers) {
+                System.out.print(sortedTopInteger + " ");
+            }
+        }
+    }
+
+    private static List<Integer> getSortedList(List<Integer> topIntegers) {
+        Collections.sort(topIntegers);
+        Collections.reverse(topIntegers);
+        Stream<Integer> getElements;
+        if (topIntegers.size() > 5) {
+            getElements = topIntegers.stream().limit(5);
+        } else {
+            getElements = topIntegers.stream().limit(topIntegers.size());
+        }
+        return getElements.collect(Collectors.toList());
+    }
+
+    private static List<Integer> collectIntegers(int[] numbers, double average) {
+        List<Integer> topIntegers = new ArrayList<>();
+        for (int number : numbers) {
+            if (number > average) {
+                topIntegers.add(number);
+            }
+        }
+        return topIntegers;
+    }
+}
