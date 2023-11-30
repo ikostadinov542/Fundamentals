@@ -1,0 +1,107 @@
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class ThePianist {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        Map<String, Map<String, String>> pieces = fillPieces(scanner);
+        String input = scanner.nextLine();
+
+        while (!"Stop".equals(input)) {
+            String command = input.split("\\|")[0];
+            String piece = input.split("\\|")[1];
+            updatePieces(pieces, input, command, piece);
+            input = scanner.nextLine();
+        }
+        printFinalPieces(pieces);
+    }
+
+
+    private static Map<String, Map<String, String>> fillPieces(Scanner scanner) {
+        int piecesCount = Integer.parseInt(scanner.nextLine());
+        Map<String, Map<String, String>> piecesMap = new LinkedHashMap<>();
+
+        for (int i = 1; i <= piecesCount; i++) {
+            String[] currentSonata = scanner.nextLine().split("\\|");
+            String piece = currentSonata[0];
+            String composer = currentSonata[1];
+            String key = currentSonata[2];
+            piecesMap.putIfAbsent(piece, new LinkedHashMap<>());
+            piecesMap.get(piece).put(composer, key);
+        }
+
+        return piecesMap;
+    }
+
+    private static void updatePieces(Map<String, Map<String, String>> pieces, String input, String command, String piece) {
+        switch (command) {
+            case "Add":
+                String composer = input.split("\\|")[2];
+                String key = input.split("\\|")[3];
+                addPiece(pieces, piece, composer, key);
+                break;
+            case "Remove":
+                removePiece(pieces, piece);
+                break;
+
+            case "ChangeKey":
+                updateKey(pieces, input, piece);
+                break;
+        }
+    }
+
+    private static void addPiece(Map<String, Map<String, String>> piecesMap, String piece, String composer, String key) {
+        if (!piecesMap.containsKey(piece)) {
+            piecesMap.put(piece, new LinkedHashMap<>());
+            piecesMap.get(piece).put(composer, key);
+            System.out.printf("%s by %s in %s added to the collection!%n", piece, composer, key);
+        } else {
+            System.out.printf("%s is already in the collection!%n", piece);
+        }
+    }
+
+    private static void removePiece(Map<String, Map<String, String>> piecesMap, String piece) {
+        if (piecesMap.containsKey(piece)) {
+            piecesMap.remove(piece);
+            System.out.printf("Successfully removed %s!%n", piece);
+        } else {
+            System.out.printf("Invalid operation! %s does not exist in the collection.%n", piece);
+        }
+    }
+
+    private static void updateKey(Map<String, Map<String, String>> piecesMap, String input, String piece) {
+        if (piecesMap.containsKey(piece)) {
+            String newKey = input.split("\\|")[2];
+            changeKey(piecesMap, piece, newKey);
+            System.out.printf("Changed the key of %s to %s!%n", piece, newKey);
+        } else {
+            System.out.printf("Invalid operation! %s does not exist in the collection.%n", piece);
+        }
+    }
+
+    private static void changeKey(Map<String, Map<String, String>> piecesMap, String piece, String newKey) {
+        Map<String, String> stringStringMap = piecesMap.get(piece);
+        for (var entry : stringStringMap.entrySet()) {
+            String currComposer = entry.getKey();
+            stringStringMap.put(currComposer, newKey);
+        }
+    }
+
+    private static void printFinalPieces(Map<String, Map<String, String>> pieces) {
+        pieces.entrySet().forEach(e -> {
+            String piece = e.getKey();
+            System.out.print(piece + " -> ");
+            Map<String, String> innerMap = e.getValue();
+            innerMap.entrySet().forEach(a -> {
+                String composer = a.getKey();
+                String key = a.getValue();
+                System.out.printf("Composer: %s, Key: %s%n", composer, key);
+            });
+        });
+    }
+}
+
+}
