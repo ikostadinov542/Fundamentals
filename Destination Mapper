@@ -1,0 +1,44 @@
+   String input = scanner.nextLine();
+
+        List<String> validDestinations = new ArrayList<>();
+        fillValidDestinations(input, validDestinations);
+        calculateTravelPoints(validDestinations);
+        printValidDestinations(validDestinations);
+        System.out.printf("Travel Points: %d", calculateTravelPoints(validDestinations));
+
+    }
+
+    private static void fillValidDestinations(String input, List<String> validDestinations) {
+        String destinationRegex = ("([=\\/])(?<destination>[A-Z][A-z]{2,})\\1");
+        Pattern pattern = Pattern.compile(destinationRegex);
+        Matcher matcher = pattern.matcher(input);
+
+            //([=/])(?<destination>[A-Z][a-z]+)\1
+        while (matcher.find()) {
+            String matchedDestination = matcher.group("destination");
+            validDestinations.add(matchedDestination);
+        }
+
+    }
+
+    private static int calculateTravelPoints(List<String> validDestinations) {
+        int travelPoints = 0;
+
+        for (int index = 0; index <= validDestinations.size() - 1; index++) {
+            travelPoints += validDestinations.get(index).length();
+        }
+        return travelPoints;
+    }
+
+    private static void printValidDestinations(List<String> validDestinations) {
+        System.out.print("Destinations: ");
+        if (validDestinations.isEmpty()) {
+            System.out.println();
+        }
+        for (int index = 0; index <= validDestinations.size() - 1; index++) {
+            if (index == validDestinations.size() - 1) {
+                System.out.println(validDestinations.get(index));
+            } else {
+                System.out.print(validDestinations.get(index) + ", ");
+            }
+        }
