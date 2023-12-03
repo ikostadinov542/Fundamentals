@@ -1,0 +1,32 @@
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class BossRush {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int countOfInputs = Integer.parseInt(scanner.nextLine());
+        String validRegex = "(?<boss>\\|[A-Z]{4,}\\|):#(?<title>[A-Za-z]+\\s[A-Za-z]+)#";
+        while (countOfInputs-- > 0) {
+            String input = scanner.nextLine();
+            Pattern pattern = Pattern.compile(validRegex);
+            Matcher matcher = pattern.matcher(input);
+
+            if (matcher.find()) {
+                String bossName = matcher.group("boss");
+                String bossTitle = matcher.group("title");
+                bossName = bossName.replaceAll("\\|", "");
+                System.out.printf("%s, The %s%n", bossName, bossTitle);
+                System.out.printf(">> Strength: %d%n", bossName.length());
+                System.out.printf(">> Armor: %d%n", bossTitle.length());
+            } else {
+                System.out.println("Access denied!");
+            }
+
+
+        }
+
+
+    }
+}
