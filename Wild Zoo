@@ -1,0 +1,89 @@
+import java.util.*;
+import java.util.regex.Pattern;
+
+public class WildZoo {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String input = scanner.nextLine();
+
+        Map<String, Integer> animalsFood = new LinkedHashMap<>();
+        Map<String, List<String>> animalLivingArea = new LinkedHashMap<>();
+
+        while (!"EndDay".equals(input)) {
+            String[] tokens = input.split("\\s+");
+            String command = tokens[0];
+            switch (command) {
+                case "Add:":
+                    addAnimal(animalsFood, animalLivingArea, tokens);
+                    break;
+                case "Feed:":
+                    feedAnimal(animalsFood, animalLivingArea, tokens);
+                    break;
+            }
+            input = scanner.nextLine();
+        }
+        printAnimals(animalsFood);
+        printAreas(animalLivingArea);
+    }
+
+    private static void printAreas(Map<String, List<String>> animalLivingArea) {
+        System.out.println("Areas with hungry animals:");
+        for (Map.Entry<String, List<String>> stringListEntry : animalLivingArea.entrySet()) {
+            if (stringListEntry.getValue().size() > 0) {
+                System.out.printf("%s: %d%n", stringListEntry.getKey(), stringListEntry.getValue().size());
+            }
+        }
+    }
+
+    private static void printAnimals(Map<String, Integer> animalsFood) {
+        System.out.println("Animals:");
+        for (Map.Entry<String, Integer> entry : animalsFood.entrySet()) {
+            System.out.printf(" %s -> %dg%n", entry.getKey(), entry.getValue());
+        }
+    }
+
+    private static void feedAnimal(Map<String, Integer> animalsFood, Map<String, List<String>> animalLivingArea, String[] tokens) {
+        String[] feedAnimalParams = tokens[1].split("-");
+        String animalNameToFeed = feedAnimalParams[0];
+        int food = Integer.parseInt(feedAnimalParams[1]);
+        if (animalsFood.containsKey(animalNameToFeed)) {
+            animalsFood.put(animalNameToFeed, animalsFood.get(animalNameToFeed) - food);
+            fedAnimal(animalsFood, animalLivingArea, animalNameToFeed);
+        }
+    }
+
+    private static void fedAnimal(Map<String, Integer> animalsFood, Map<String, List<String>> animalLivingArea, String animalNameToFeed) {
+        if (animalsFood.get(animalNameToFeed) < 1) {
+            animalsFood.remove(animalNameToFeed);
+            removeAnimal(animalLivingArea, animalNameToFeed);
+
+            System.out.printf("%s was successfully fed%n", animalNameToFeed);
+        }
+    }
+
+    private static void removeAnimal(Map<String, List<String>> animalLivingArea, String animalNameToFeed) {
+        for (List<String> animals : animalLivingArea.values()) {
+            animals.remove(animalNameToFeed);
+        }
+    }
+
+    private static void addAnimal(Map<String, Integer> animalsFood, Map<String, List<String>> animalLivingArea, String[] tokens) {
+        String[] addCommandParams = tokens[1].split("-");
+        String animalName = addCommandParams[0];
+        int neededFoodQuantity = Integer.parseInt(addCommandParams[1]);
+        String areaOfLiving = addCommandParams[2];
+
+        if (!animalsFood.containsKey(animalName)) {
+            animalsFood.put(animalName, neededFoodQuantity);
+            if (!animalLivingArea.containsKey(areaOfLiving)) {
+                animalLivingArea.put(areaOfLiving, new ArrayList<>());
+                animalLivingArea.get(areaOfLiving).add(animalName);
+            } else {
+                animalLivingArea.get(areaOfLiving).add(animalName);
+            }
+        } else {
+            animalsFood.put(animalName, animalsFood.get(animalName) + neededFoodQuantity);
+        }
+    }
+}
