@@ -1,0 +1,83 @@
+import java.util.*;
+
+public class TheFinalQuest {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+
+        List<String> textList = getTextList(scanner);
+        String input = scanner.nextLine();
+
+        while (!"Stop".equals(input)) {
+            String[] tokens = input.split("\\s+");
+            String command = tokens[0];
+            updateList(textList, tokens, command);
+            input = scanner.nextLine();
+        }
+        printResult(textList);
+
+    }
+
+    private static ArrayList<String> getTextList(Scanner scanner) {
+        return new ArrayList<>(Arrays.asList(scanner.nextLine().split("\\s+")));
+    }
+
+    private static void updateList(List<String> textList, String[] tokens, String command) {
+        switch (command) {
+            case "Delete" -> deleteWord(textList, tokens);
+            case "Swap" -> swapWords(textList, tokens);
+            case "Put" -> putWord(textList, tokens);
+            case "Sort" -> textList.sort(Collections.reverseOrder());
+            case "Replace" -> replaceWord(textList, tokens);
+        }
+    }
+
+    private static void deleteWord(List<String> textList, String[] tokens) {
+        int indexToDelete = Integer.parseInt(tokens[1]);
+        if (isValidIncludeSize(indexToDelete + 1, textList) && indexToDelete != textList.size() - 1) {
+            textList.remove(indexToDelete + 1);
+        }
+    }
+
+    private static void swapWords(List<String> textList, String[] tokens) {
+        String wordA = tokens[1];
+        String wordB = tokens[2];
+        int indexA = textList.indexOf(wordA);
+        int indexB = textList.indexOf(wordB);
+        if (indexA > -1 && indexB > -1) {
+            Collections.swap(textList, indexA, indexB);
+        }
+    }
+
+    private static void putWord(List<String> textList, String[] tokens) {
+        String wordToPut = tokens[1];
+        int indexToPut = Integer.parseInt(tokens[2]);
+        if (isValidIncludeSize(indexToPut - 1, textList)) {
+            if (indexToPut == textList.size()) {
+                textList.add(wordToPut);
+            } else {
+                textList.add(indexToPut - 1, wordToPut);
+            }
+        }
+    }
+
+    private static void replaceWord(List<String> textList, String[] tokens) {
+        String replacement = tokens[1];
+        String wordToReplace = tokens[2];
+
+        int indexOfReplacingWord = textList.indexOf(wordToReplace);
+        if (indexOfReplacingWord != -1) {
+            textList.set(indexOfReplacingWord, replacement);
+        }
+    }
+
+    private static void printResult(List<String> textList) {
+        for (String s : textList) {
+            System.out.print(s + " ");
+        }
+    }
+
+    private static boolean isValidIncludeSize(int index, List<String> rawText) {
+        return index >= 0 && index <= rawText.size();
+    }
+}
